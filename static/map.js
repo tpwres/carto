@@ -24,7 +24,8 @@ class MapController {
       maxZoom: 12,
     });
     this.setupLayers();
-    this.loadObjects();
+    const objects_url = root.dataset.objectsList;
+    this.loadObjects(objects_url);
     this.map.setView([52.0693, 19.4803], 7);
     // this.map.setMaxBounds(this.map.getBounds())
   }
@@ -56,8 +57,8 @@ class MapController {
     layerControl.addTo(this.map);
   }
 
-  loadObjects() {
-    fetch("/objects.json")
+  loadObjects(url) {
+    fetch(url)
       .then((response) => response.json())
       .then((data) => this.addFeatures(data));
   }
