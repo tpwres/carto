@@ -17,6 +17,7 @@ create_config() {
   esac
 
   envsubst < cloudflare-config.toml > build_cloudflare_config.toml
+  cat build_cloudflare_config.toml
 }
 
 
