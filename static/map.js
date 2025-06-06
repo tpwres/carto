@@ -145,6 +145,7 @@ class MapController {
     const fg = style.getPropertyValue("--fg");
     const accent = style.getPropertyValue("--accent");
     const lightGray = style.getPropertyValue("--light-gray");
+    const darkGray = style.getPropertyValue("--dark-gray");
     return [
       // Water bodies
       { dataLayer: "water", symbolizer: P({ fill: "#a8d5f5", opacity: 0.8 }) },
@@ -196,14 +197,26 @@ class MapController {
       {
         dataLayer: "boundary",
         symbolizer: Ln({
+          color: darkGray,
+          width: 5,
+          opacity: 0.9,
+        }),
+        filter: (zoom, feature) => feature.props.admin_level == 2,
+      },
+      {
+        dataLayer: "boundary",
+        symbolizer: Ln({
           color: lightGray,
           width: 2,
           opacity: 0.3,
           dash: [5, 5],
         }),
         filter: (zoom, feature) => {
-          if ("admin_level" in feature.props && feature.props.admin_level > 8)
-            return false;
+          if ("admin_level" in feature.props) {
+            const level = feature.props.admin_level;
+            if (level > 8) return false;
+            if (level < 4) return false;
+          }
           return true;
         },
       },
