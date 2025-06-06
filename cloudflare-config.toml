@@ -2,7 +2,7 @@
 base_url = "/"
 compile_sass = true
 build_search_index = false
-title = "TPW Map"
+title = "TPW Carto"
 theme = 'web'
 
 [markdown]
