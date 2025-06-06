@@ -27,7 +27,10 @@ class MapController {
     const objects_url = root.dataset.objectsList;
     this.loadObjects(objects_url);
     this.map.setView([52.0693, 19.4803], 7);
-    // this.map.setMaxBounds(this.map.getBounds())
+    this.map.setMaxBounds([
+      [48.986, 13.99],
+      [55.228, 24.161],
+    ]);
   }
 
   loadOSMLayer() {
