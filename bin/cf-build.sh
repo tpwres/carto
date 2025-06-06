@@ -1,6 +1,11 @@
 #! /bin/bash
 # set -x
 
+install_zola() {
+    asdf plugin add zola https://github.com/salasrod/asdf-zola
+    asdf install zola 0.19.2
+    asdf global zola 0.19.2
+}
 create_config() {
   case $CF_PAGES_BRANCH in
       main)
@@ -20,5 +25,6 @@ build() {
   zola -c build_cloudflare_config.toml build
 }
 
+install_zola
 create_config
 build
