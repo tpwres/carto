@@ -20,17 +20,21 @@ class MapController {
   constructor(root) {
     this.style = getComputedStyle(document.body);
     this.map = L.map(root, {
-      minZoom: 7,
-      maxZoom: 12,
+      zoomSnap: 0.25,
+      zoomDelta: 0.25,
+    });
+    this.map.on("zoomend", (ev) => {
+      console.log("zoomend", ev, this.map.getZoom());
     });
     this.setupLayers();
     const objects_url = root.dataset.objectsList;
     this.loadObjects(objects_url);
-    this.map.setView([52.0693, 19.4803], 7);
-    this.map.setMaxBounds([
+    const bounds = [
       [48.986, 13.99],
       [55.228, 24.161],
-    ]);
+    ];
+    this.map.setMaxBounds(bounds);
+    this.map.fitBounds(bounds);
   }
 
   loadOSMLayer() {
