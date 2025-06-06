@@ -1,5 +1,5 @@
 # The URL the site will be built for
-base_url = "https://example.com"
+base_url = "${BASE_URL}"
 compile_sass = true
 build_search_index = false
 title = "TPW Map"
@@ -14,8 +14,7 @@ highlight_code = false
 # Put all your custom variables here
 
 new_issue_url = "https://github.com/tpwres/teczki-polskiego-wrestlingu/issues/new"
-
-mapobjects_path = '/objects.json'
+mapobjects_path = '//tpwres.pl/map_objects.json'
 
 
 list_pages = false
