@@ -23,9 +23,6 @@ class MapController {
       zoomSnap: 0.25,
       zoomDelta: 0.25,
     });
-    this.map.on("zoomend", (ev) => {
-      console.log("zoomend", ev, this.map.getZoom());
-    });
     this.setupLayers();
     const objects_url = root.dataset.objectsList;
     this.loadObjects(objects_url);
