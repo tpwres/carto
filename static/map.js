@@ -47,6 +47,8 @@ class MapController {
   loadPMVectorLayers() {
     const vector_layer = protomapsL.leafletLayer({
       url: this.vector_tiles_url,
+      minZoom: 6.5,
+      maxZoom: 13,
       paintRules: this.paint_rules(),
       labelRules: this.label_rules(),
       backgroundColor: this.style.getPropertyValue("--bg"),
