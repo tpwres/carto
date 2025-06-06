@@ -142,15 +142,12 @@ class MapController {
 
   paint_rules() {
     const style = this.style;
+    const fg = style.getPropertyValue("--fg");
     const accent = style.getPropertyValue("--accent");
     const lightGray = style.getPropertyValue("--light-gray");
-    const darkRed = style.getPropertyValue("--dark-red");
     return [
       // Water bodies
-      {
-        dataLayer: "water",
-        symbolizer: P({ fill: "#a8d5f5", opacity: 0.8 }),
-      },
+      { dataLayer: "water", symbolizer: P({ fill: "#a8d5f5", opacity: 0.8 }) },
 
       // Land/background
       {
@@ -163,34 +160,36 @@ class MapController {
       },
 
       // Natural areas (parks, forests)
-      {
-        dataLayer: "park",
-        symbolizer: P({
-          fill: "#d4e7c5",
-          opacity: 0.7,
-        }),
-      },
+      { dataLayer: "park", symbolizer: P({ fill: "#d4e7c5", opacity: 0.7 }) },
 
       // Buildings
       {
         dataLayer: "building",
-        symbolizer: {
+        symbolizer: P({
           type: "fill",
-          fill: "#e8e8e8",
-          stroke: "#d0d0d0",
+          fill: accent,
+          stroke: "black",
           width: 0.5,
           opacity: 0.8,
-        },
+        }),
       },
 
       // Major roads/highways
       {
         dataLayer: "transportation",
+        symbolizer: Ln({ color: accent, width: 1.2, opacity: 0.8 }),
+        filter: (zoom, feature) => feature.props.class != "rail",
+      },
+      // Rail
+      {
+        dataLayer: "transportation",
         symbolizer: Ln({
-          color: accent,
-          width: 2,
-          opacity: 0.8,
+          color: fg,
+          width: 3,
+          opacity: 0.5,
+          dash: [10, 10],
         }),
+        filter: (zoom, feature) => feature.props.class == "rail",
       },
 
       // Administrative boundaries
@@ -199,9 +198,14 @@ class MapController {
         symbolizer: Ln({
           color: lightGray,
           width: 2,
-          opacity: 0.6,
+          opacity: 0.3,
           dash: [5, 5],
         }),
+        filter: (zoom, feature) => {
+          if ("admin_level" in feature.props && feature.props.admin_level > 8)
+            return false;
+          return true;
+        },
       },
     ];
   }
