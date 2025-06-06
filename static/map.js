@@ -92,6 +92,7 @@ class MapController {
       html: html,
       className: `no-bg-icon ${single_org_style}`,
       iconSize: this.marker_size,
+      iconAnchor: [w / 2, h],
     });
     return L.marker(latlng, {
       icon: icon,
