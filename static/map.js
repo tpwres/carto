@@ -164,9 +164,9 @@ class MapController {
   paint_rules() {
     const style = this.style;
     const fg = style.getPropertyValue("--fg");
-    const accent = style.getPropertyValue("--accent");
-    const lightGray = style.getPropertyValue("--light-gray");
-    const darkGray = style.getPropertyValue("--dark-gray");
+    const accent = style.getPropertyValue("--accent") || fg;
+    const lightGray = style.getPropertyValue("--light-gray") || fg;
+    const darkGray = style.getPropertyValue("--dark-gray") || fg;
     return [
       // Water bodies
       { dataLayer: "water", symbolizer: P({ fill: "#a8d5f5", opacity: 0.8 }) },
@@ -246,7 +246,8 @@ class MapController {
 
   label_rules() {
     const style = this.style;
-    const textColor = style.getPropertyValue("--text");
+    const textColor =
+      style.getPropertyValue("--text") || style.getPropertyValue("--fg");
     return [
       {
         dataLayer: "place",
