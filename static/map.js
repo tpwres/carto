@@ -19,19 +19,35 @@ class MapController {
 
   constructor(root) {
     this.style = getComputedStyle(document.body);
-    this.map = L.map(root, {
+    this.root = root;
+    document.addEventListener("themechanged", this.on_theme_changed.bind(this));
+    this.init_map();
+  }
+
+  init_map() {
+    const objects_url = this.root.dataset.objectsList;
+    this.map = L.map(this.root, {
       zoomSnap: 0.25,
       zoomDelta: 0.25,
     });
-    this.setupLayers();
-    const objects_url = root.dataset.objectsList;
-    this.loadObjects(objects_url);
+    this.setup_layers();
+    this.load_objects(objects_url);
     const bounds = [
       [48.986, 13.99],
       [55.228, 24.161],
     ];
     this.map.setMaxBounds(bounds);
     this.map.fitBounds(bounds);
+  }
+
+  on_theme_changed(event) {
+    const old_vec = this.vector_layer;
+    const vec = this.loadPMVectorLayers();
+    this.vector_layer = vec;
+    this.map.addLayer(vec);
+    this.map.removeLayer(old_vec);
+    this.layer_control.remove();
+    this.setup_controls(this.osm_layer, vec);
   }
 
   loadOSMLayer() {
@@ -53,33 +69,40 @@ class MapController {
     return vector_layer;
   }
 
-  setupLayers() {
+  setup_layers() {
     const osm = this.loadOSMLayer();
     const vec = this.loadPMVectorLayers();
+    this.vector_layer = vec;
+    this.osm_layer = osm;
     this.map.addLayer(vec);
+    this.setup_controls(osm, vec);
+  }
+
+  setup_controls(osm, vec) {
     const layerControl = L.control.layers();
+    this.layer_control = layerControl;
     layerControl.addBaseLayer(vec, "Base map");
     layerControl.addBaseLayer(osm, "OpenStreetMap");
     layerControl.addTo(this.map);
   }
 
-  loadObjects(url) {
+  load_objects(url) {
     fetch(url)
       .then((response) => response.json())
-      .then((data) => this.addFeatures(data));
+      .then((data) => this.add_features(data));
   }
 
-  addFeatures(geojson) {
+  add_features(geojson) {
     for (const feature of geojson) {
       const kind = feature.properties.type;
       L.geoJSON(feature, {
         pointToLayer: (point, latlng) =>
-          this.createMarker(kind, latlng, feature),
+          this.create_marker(kind, latlng, feature),
       }).addTo(this.map);
     }
   }
 
-  createMarker(kind, latlng, feature) {
+  create_marker(kind, latlng, feature) {
     const sprite = "/lucide-sprite.svg";
     const orgs = feature.properties.orgs || [];
     const single_org_style = orgs.length == 1 ? `orgpin-${orgs[0]}` : "";
@@ -97,10 +120,10 @@ class MapController {
     return L.marker(latlng, {
       icon: icon,
       title: feature.properties.name,
-    }).bindPopup((layer) => this.popupContent(feature));
+    }).bindPopup((layer) => this.popup_content(feature));
   }
 
-  popupContent(feature) {
+  popup_content(feature) {
     const el = document.createElement("div");
     el.style.fontSize = "1rem";
     el.innerHTML = feature.properties.description;
