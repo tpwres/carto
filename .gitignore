@@ -1,2 +1,8 @@
 *.pmtiles
+*.osm.pbf
+mapmaker/*.zip
 mapmaker/coastline/
+mapmaker/landcover/
+public/
+static/objects.json
+static/mapdata.json
