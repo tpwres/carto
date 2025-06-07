@@ -8,10 +8,12 @@ function switchTheme() {
     document.documentElement.setAttribute("data-theme", "light");
     // Set the user's theme preference to dark
     localStorage.setItem("theme", "light");
+    dispatchThemeChange('light')
   } else {
     document.documentElement.setAttribute("data-theme", "dark");
     // Set the user's theme preference to light
     localStorage.setItem("theme", "dark");
+    dispatchThemeChange('dark')
   }
 }
 
@@ -37,6 +39,15 @@ if (currentTheme === null || currentTheme === undefined) {
 function switchThemeOG() {
   document.documentElement.setAttribute("data-theme", "og");
   localStorage.setItem("theme", "og");
+  dispatchThemeChange('og')
+}
+
+function dispatchThemeChange(theme) {
+  const event = new CustomEvent('themechanged', {
+    detail: { theme },
+    cancelable: false
+  })
+  document.dispatchEvent(event)
 }
 </script>
 
