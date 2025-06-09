@@ -32,7 +32,6 @@ header_links = [
     { url = "//art.tpwres.pl", name = "Artwall", icon = "image-play" },
   { url = "//carto.tpwres.pl", name = "Map", icon = "map" }
 ]
-]
 
 footer_links = [
     { url = "//tpwres.pl/about", name = "About", icon = "info" },
