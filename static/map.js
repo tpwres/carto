@@ -104,22 +104,38 @@ class MapController {
   create_marker(kind, latlng, feature) {
     const sprite = "/lucide-sprite.svg";
     const orgs = feature.properties.orgs || [];
-    const single_org_style = orgs.length == 1 ? `orgpin-${orgs[0]}` : "";
+    const num_orgs = orgs.length;
     const [w, h] = this.marker_size;
+    let html;
 
-    const html = `<svg class="feather-nowidth" viewBox="0 0 24 24" width="${w}" height="${h}">
-            <use href="${sprite}#${this.iconsForKind[kind]}"/>
-        </svg>`;
-    const icon = L.divIcon({
-      html: html,
-      className: `no-bg-icon ${single_org_style}`,
-      iconSize: this.marker_size,
-      iconAnchor: [w / 2, h],
-    });
-    return L.marker(latlng, {
-      icon: icon,
-      title: feature.properties.name,
-    }).bindPopup((layer) => this.popup_content(feature));
+    let org_style = "";
+    if (num_orgs == 0 || num_colors > 2) {
+        html = `<svg class="feather-nowidth" viewBox="0 0 24 24" width="${w}" height="${h}">
+        <use href="${sprite}#${this.iconsForKind[kind]}"/>
+      </svg>`;
+    } else if (num_orgs == 1) {
+      org_style = `orgpin-${orgs[0]}`;
+      html = `<svg class="feather-nowidth" viewBox="0 0 24 24" width="${w}" height="${h}">
+        <use href="${sprite}#${this.iconsForKind[kind]}"/>
+      </svg>`;
+    } else if (num_orgs == 2) {
+        const [gradient_id, defs] = this.create_gradient_defs(orgs);
+        // For an angled gradient, try: x1,y1 = 15%,100%, x2,y2=100%,50%
+        html = `<svg class="feather-nowidth" viewBox="0 0 24 24" width="${w}" height="${h}">
+          ${defs}
+          <use href="${sprite}#${this.iconsForKind[kind]}" fill="url(#${gradient_id}-bg)" stroke="url(#${gradient_id}-fg)" />
+      </svg>`;
+    }
+      const icon = L.divIcon({
+          html: html,
+          className: `no-bg-icon ${org_style}`,
+          iconSize: this.marker_size,
+          iconAnchor: [w / 2, h],
+      });
+      return L.marker(latlng, {
+          icon: icon,
+          title: feature.properties.name,
+      }).bindPopup((layer) => this.popup_content(feature));
   }
 
   popup_content(feature) {
@@ -134,6 +150,7 @@ class MapController {
   }
 
   brand_colors(org) {
+    // NOTE: can we read this from styles instead?
     switch (org) {
       case "ppw":
         return { fg: "#c7c7c7", bg: "#5b007e" };
@@ -143,6 +160,10 @@ class MapController {
         return { fg: "#ffffff", bg: "#133762" };
       case "dfw":
         return { fg: "#fbf1c7", bg: "#a9100b" };
+      case "ddw":
+        return { fg: "#fbf1c7", bg: "#71171f" };
+      case "tbw":
+        return { fg: "#999a93", bg: "#000" };
       default:
         return { fg: "#ffffff", bg: "#000000" };
     }
@@ -150,6 +171,25 @@ class MapController {
 
   has_logo_badge(org) {
       return ['ddw', 'dfw', 'kpw', 'low', 'mcw', 'mzw', 'piwg', 'ppw', 'ptw', 'pxw', 'tbw', 'wwe'].indexOf(org) != -1;
+  }
+
+  create_gradient_defs(orgs) {
+    const [org1, org2] = orgs;
+    const bc1 = this.brand_colors(org1);
+    const bc2 = this.brand_colors(org2);
+    const gradient_id = `gradient-${org1}-${org2}`;
+    const defs = `
+      <defs>
+         <linearGradient id="${gradient_id}-bg">
+           <stop offset="50%" stop-color="${bc1.bg}" />
+           <stop offset="50%" stop-color="${bc2.bg}" />
+         </linearGradient>
+         <linearGradient id="${gradient_id}-fg">
+           <stop offset="50%" stop-color="${bc1.fg}" />
+           <stop offset="50%" stop-color="${bc2.fg}" />
+         </linearGradient>
+      </defs>`;
+    return [gradient_id, defs];
   }
 
   badge(org) {
