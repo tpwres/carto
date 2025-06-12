@@ -129,6 +129,7 @@ class MapController {
     el.innerHTML = feature.properties.description;
     for (const org of feature.properties.orgs || []) {
       el.append(this.badge(org));
+        el.append(' ');
     }
     return el;
   }
@@ -152,11 +153,11 @@ class MapController {
     a.classList.add("org-badge", "nu");
     const brandcolor = this.brand_colors(org).bg;
     const css = `
-            background: url(${org}-badge.svg) no-repeat 0 0 / cover, ${brandcolor};
-            background-position: center;
-            color: transparent;
-            font-size: 1.25rem
-        `;
+      background: url(${org}-badge.svg) no-repeat 0 0 / cover, ${brandcolor};
+      background-position: center;
+      color: transparent;
+      font-size: 1.25rem;
+    `;
     a.style.cssText = css;
     return a;
   }
