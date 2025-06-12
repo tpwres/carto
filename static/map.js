@@ -1,4 +1,4 @@
-// import * as L from '/leaflet-src.esm.js';
+import { Map, TileLayer, Control, GeoJSON, Marker, DivIcon } from '/leaflet-src.js';
 
 const P = (options) => new protomapsL.PolygonSymbolizer(options);
 const Ln = (options) => new protomapsL.LineSymbolizer(options);
@@ -26,7 +26,7 @@ class MapController {
 
   init_map() {
     const objects_url = this.root.dataset.objectsList;
-    this.map = L.map(this.root, {
+    this.map = new Map(this.root, {
       zoomSnap: 0.25,
       zoomDelta: 0.25,
     });
@@ -51,7 +51,7 @@ class MapController {
   }
 
   loadOSMLayer() {
-    return L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    return new TileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 16,
       attribution: this.map_attribution,
     });
@@ -79,7 +79,7 @@ class MapController {
   }
 
   setup_controls(osm, vec) {
-    const layerControl = L.control.layers();
+    const layerControl = new Control.Layers();
     this.layer_control = layerControl;
     layerControl.addBaseLayer(vec, "Base map");
     layerControl.addBaseLayer(osm, "OpenStreetMap");
@@ -95,7 +95,7 @@ class MapController {
   add_features(geojson) {
     for (const feature of geojson) {
       const kind = feature.properties.type;
-      L.geoJSON(feature, {
+      new GeoJSON(feature, {
         pointToLayer: (point, latlng) =>
           this.create_marker(kind, latlng, feature),
       }).addTo(this.map);
@@ -111,13 +111,13 @@ class MapController {
     const html = `<svg class="feather-nowidth" viewBox="0 0 24 24" width="${w}" height="${h}">
             <use href="${sprite}#${this.iconsForKind[kind]}"/>
         </svg>`;
-    const icon = L.divIcon({
+    const icon = new DivIcon({
       html: html,
       className: `no-bg-icon ${single_org_style}`,
       iconSize: this.marker_size,
       iconAnchor: [w / 2, h],
     });
-    return L.marker(latlng, {
+    return new Marker(latlng, {
       icon: icon,
       title: feature.properties.name,
     }).bindPopup((layer) => this.popup_content(feature));
