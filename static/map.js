@@ -109,7 +109,7 @@ class MapController {
     let html;
 
     let org_style = "";
-    if (num_orgs == 0 || num_colors > 2) {
+    if (num_orgs == 0 || num_orgs > 2) {
         html = `<svg class="feather-nowidth" viewBox="0 0 24 24" width="${w}" height="${h}">
         <use href="${sprite}#${this.iconsForKind[kind]}"/>
       </svg>`;
