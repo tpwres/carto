@@ -141,6 +141,8 @@ class MapController {
         return { fg: "#ffffff", bg: "#208315" };
       case "kpw":
         return { fg: "#ffffff", bg: "#133762" };
+      case "dfw":
+        return { fg: "#fbf1c7", bg: "#a9100b" };
       default:
         return { fg: "#ffffff", bg: "#000000" };
     }
