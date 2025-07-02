@@ -147,16 +147,23 @@ class MapController {
     }
   }
 
+  has_logo_badge(org) {
+      return ['ddw', 'dfw', 'kpw', 'low', 'mcw', 'mzw', 'piwg', 'ppw', 'ptw', 'pxw', 'tbw', 'wwe'].indexOf(org) != -1;
+  }
+
   badge(org) {
     const a = document.createElement("a");
     a.textContent = org.toUpperCase();
     a.classList.add("org-badge", "nu");
-    const brandcolor = this.brand_colors(org).bg;
+    const brandcolor = this.brand_colors(org);
+    const has_logo = this.has_logo_badge(org);
     const css = `
-      background: url(${org}-badge.svg) no-repeat 0 0 / cover, ${brandcolor};
+      background: url(${org}-badge.svg) no-repeat 0 0 / cover, ${brandcolor.bg};
       background-position: center;
-      color: transparent;
+      color: ${has_logo ? 'transparent' : '#fff'};
       font-size: 1.25rem;
+      font-family: monospace;
+      padding: 0 0.5rem;
     `;
     a.style.cssText = css;
     return a;
