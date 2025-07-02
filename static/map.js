@@ -52,7 +52,6 @@ class MapController {
 
   loadOSMLayer() {
     return L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 16,
       attribution: this.map_attribution,
     });
   }
