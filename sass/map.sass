@@ -56,9 +56,34 @@
   width: initial
   height: initial
 
+// Override controls to match theme
 .leaflet-control-attribution
     background: var(--accent-bg) !important
 
 .leaflet-popup-content-wrapper, .leaflet-popup-tip
     background: var(--accent-bg)
     color: var(--fg)
+
+.leaflet-bar, .leaflet-control-layers
+  border: 2px solid color-mix(in srgb, var(--dark-gray), transparent 20%) !important
+
+.leaflet-bar a
+  background: var(--accent-bg)
+  color: var(--fg)
+  filter: none !important
+
+  &.leaflet-disabled
+    background: var(--accent-bg)
+    color: var(--light-gray)
+
+.leaflet-control-layers-toggle
+  background: url(images/layers.png) 50% 50% no-repeat, var(--accent-bg)
+
+.leaflet-retina .leaflet-control-layers-toggle
+  background: url(images/layers-2x.png) 50% 50% no-repeat, var(--accent-bg)
+
+.leaflet-control-layers-expanded
+  border: 2px solid color-mix(in srgb, var(--dark-gray), transparent 20%) !important
+  background: var(--bg)
+  color: var(--text)
+
