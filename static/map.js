@@ -38,6 +38,7 @@ class MapController {
     ];
     this.map.setMaxBounds(bounds);
     this.map.fitBounds(bounds);
+    loader.then(() => this.focus_named_marker());
   }
 
   on_theme_changed(event) {
@@ -48,6 +49,20 @@ class MapController {
     this.map.removeLayer(old_vec);
     this.layer_control.remove();
     this.setup_controls(this.osm_layer, vec);
+  }
+
+  focus_named_marker() {
+    let fragment = document.location.hash;
+    if (!fragment) return;
+    fragment = decodeURIComponent(fragment.slice(1)).toLocaleLowerCase().replace('_', ' ')
+    this.map.eachLayer((layer) => {
+      if (!layer.feature) return;
+      // Has a feature, so is some geometry object
+      const title = layer.feature.properties.name.toLocaleLowerCase()
+      if (fragment != title) return;
+      this.map.flyTo(layer.getLatLng(), 9);
+      layer.openPopup();
+    })
   }
 
   loadOSMLayer() {
