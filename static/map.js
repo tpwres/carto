@@ -31,7 +31,7 @@ class MapController {
       zoomDelta: 0.25,
     });
     this.setup_layers();
-    this.load_objects(objects_url);
+    const loader = this.load_objects(objects_url);
     const bounds = [
       [48.986, 13.99],
       [55.228, 24.161],
@@ -86,7 +86,7 @@ class MapController {
   }
 
   load_objects(url) {
-    fetch(url)
+    return fetch(url)
       .then((response) => response.json())
       .then((data) => this.add_features(data));
   }
