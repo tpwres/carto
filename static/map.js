@@ -60,7 +60,7 @@ class MapController {
       // Has a feature, so is some geometry object
       const title = layer.feature.properties.name.toLocaleLowerCase()
       if (fragment != title) return;
-      this.map.flyTo(layer.getLatLng(), 10);
+      this.map.flyTo(layer.getLatLng(), 13);
       layer.openPopup();
     })
   }
