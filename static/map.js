@@ -159,13 +159,15 @@ class MapController {
         return { fg: "#ffffff", bg: "#133762" };
       case "dfw":
         return { fg: "#fbf1c7", bg: "#a9100b" };
+      case "twf":
+        return { fg: "#ffffff", bg: "#4f8ebf" };
       default:
         return { fg: "#ffffff", bg: "#000000" };
     }
   }
 
   has_logo_badge(org) {
-      return ['ddw', 'dfw', 'kpw', 'low', 'mcw', 'mzw', 'piwg', 'ppw', 'ptw', 'pxw', 'tbw', 'wwe'].indexOf(org) != -1;
+      return ['ddw', 'dfw', 'kpw', 'low', 'mcw', 'mzw', 'piwg', 'ppw', 'ptw', 'pxw', 'tbw', 'twf', 'wwe'].indexOf(org) != -1;
   }
 
   badge(org) {
