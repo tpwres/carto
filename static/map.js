@@ -15,6 +15,7 @@ class MapController {
     venue: "map-pin",
     "historical-venue": "map-pin-x-inside",
     "important-venue": "map-pin-check-inside",
+    "city": "building-2",
   };
 
   constructor(root) {
