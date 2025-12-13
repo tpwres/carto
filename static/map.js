@@ -40,6 +40,7 @@ class MapController {
     this.map.setMaxBounds(bounds);
     this.map.fitBounds(bounds);
     loader.then(() => this.focus_named_marker());
+    window.addEventListener("hashchange", () => this.focus_named_marker());
   }
 
   on_theme_changed(event) {
@@ -55,16 +56,20 @@ class MapController {
   focus_named_marker() {
     let fragment = document.location.hash;
     if (!fragment) return;
-    fragment = decodeURIComponent(fragment.slice(1)).toLocaleLowerCase().replace('_', ' ')
+    fragment = decodeURIComponent(fragment.slice(1))
+      .toLocaleLowerCase()
+      .replace("_", " ");
     this.map.eachLayer((layer) => {
       if (!layer.feature) return;
       // Has a feature, so is some geometry object
-      const title = layer.feature.properties.name.toLocaleLowerCase()
-      if (fragment != title) return;
+      const title = layer.feature.properties.name.toLocaleLowerCase();
+      const slug = layer.feature.properties.slug;
+      if (fragment != title && fragment != slug) return;
+
       const flightTime = 1.0; // seconds
       this.map.flyTo(layer.getLatLng(), 13, { duration: flightTime });
-      setTimeout(() => layer.openPopup(), flightTime );
-    })
+      setTimeout(() => layer.openPopup(), flightTime);
+    });
   }
 
   loadOSMLayer() {
